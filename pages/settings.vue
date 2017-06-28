@@ -10,10 +10,8 @@
         </v-tabs-bar>
       </v-tabs>
     </v-card-row>
-    <v-card-row >
-      <v-slide-x-transition>
-        <nuxt-child/>
-      </v-slide-x-transition>
+    <v-card-row>
+      <nuxt-child/>  
     </v-card-row>
   </v-card>
 </template>
