@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '~store'
 
 let instance = axios.create({
-  baseURL: 'http://racoo.ny/api/'
+  baseURL: 'http://racoony.app/api/'
 })
 
 instance.interceptors.request.use((config) => {

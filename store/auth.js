@@ -26,7 +26,7 @@ export const getters = {
 
 export const actions = {
   login ({ dispatch }, { email, password }) {
-    return axios.post('http://racoo.ny/auth/token', { 
+    return axios.post('http://racoony.app/auth/token', { 
       username: email, password: password 
     }).then((response) => {
       dispatch('setToken', { token: response.data.access_token })
@@ -37,7 +37,7 @@ export const actions = {
     })
   },
   me ({ commit, state }) {
-    return axios.get('http://racoo.ny/api/me', {
+    return axios.get('http://racoony.app/api/me', {
       headers: {
         'Authorization': 'Bearer ' + state.access_token
       }
