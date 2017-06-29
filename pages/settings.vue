@@ -1,24 +1,55 @@
 <template>
-  <v-card>
-    <v-card-row>
-      <v-tabs light>
-        <v-tabs-bar slot="activators">
-          <v-tabs-slider></v-tabs-slider>
-          <v-tabs-item router to="/settings/club">Verein</v-tabs-item>
-          <v-tabs-item router to="/settings/finances">Finanzen</v-tabs-item>
-          <v-tabs-item router to="/settings/departments">Abteilungen</v-tabs-item>
-        </v-tabs-bar>
-      </v-tabs>
-    </v-card-row>
-    <v-card-row>
-      <nuxt-child/>  
-    </v-card-row>
-  </v-card>
+  <v-layout>
+    <v-flex xs3>
+      <v-list three-line>
+        <v-list-item>
+          <v-list-tile avatar router to="/settings/club" v-model="club">
+            <v-list-tile-content>
+              <v-list-tile-title>Vereinsdaten</v-list-tile-title>
+              <v-list-tile-sub-title>Name, Anschrift und alle wichtigen Daten des Vereins</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-item>
+        <v-list-item>
+          <v-list-tile avatar nuxt to="/settings/finances" v-model="finances">
+            <v-list-tile-content>
+              <v-list-tile-title>Finanzen</v-list-tile-title>
+              <v-list-tile-sub-title>Einstellung rund ums Geld, wie z.B. Buchhaltung und Kontodaten</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-item>
+        <v-list-item>
+          <v-list-tile avatar nuxt to="/settings/departments" v-model="departments">
+            <v-list-tile-content>
+              <v-list-tile-title>Abteilungen</v-list-tile-title>
+              <v-list-tile-sub-title>Verwaltung der verschiedenen Abteilungen in deinem Verein</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-item>
+      </v-list>
+    </v-flex>
+    <v-flex xs9>
+      <div transition="v-slide-x-transition">
+      <nuxt-child/>
+      </div>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
   export default {
     pageTitle: 'Einstellungen',
-    middleware: 'authenticated'
+    middleware: 'authenticated',
+    computed: {
+      club () {
+        return this.$route.name === 'settings-club'
+      },
+      finances () {
+        return this.$route.name === 'settings-finances'
+      },
+      departments () {
+        return this.$route.name === 'settings-departments'
+      }
+    }
   }
 </script>
