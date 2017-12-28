@@ -1,5 +1,3 @@
-import axios from '~plugins/axios'
-
 export const state = () => ({
   club: {
     general: {
@@ -17,7 +15,7 @@ export const getters = {
 
 export const actions = {
   getSettingsClubGeneral({ commit }) {
-    return axios.get('settings/club')
+    return this.$axios.get('settings/club')
       .then((response) => {
         let settingsClubGeneral = response.data.data
         commit('setClubGeneral', settingsClubGeneral)

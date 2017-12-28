@@ -1,28 +1,24 @@
-import axios from '~plugins/axios'
-
 export const state = () => ({
-  departments: []
+  members: []
 })
 
 export const actions = {
-  all({ commit }) {
-    return axios.get('departments', {
-        params: {
-          with: 'members'
-        }
-      })
-      .then((res) => {
-        let items = res.data.data
-        commit('setDepartments', items)
-        return res.data
-      })
-      .catch((err) => {
-      })
+  async fetchAllMembers({ commit }) {
+    let members = null
+    try {
+      members = await this.$axios.$get('/api/members')
+    } catch (error) {
+      console.log(error)
+    }
+
+    if (members) {
+      commit('setMembers', members.data)
+    }
   }
 }
 
 export const mutations = {
-  setDepartments(state, items) {
-    state.departments = items
+  setMembers(state, items) {
+    state.members = items
   }
 }

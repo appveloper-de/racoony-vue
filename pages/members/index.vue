@@ -8,7 +8,6 @@
       </v-card-row>
       <v-card-row>
         <v-list style="flex: 1;">
-          <v-list-item>
             <v-list-tile>
               <v-list-tile-content>
                 <v-list-tile-title>Name</v-list-tile-title>
@@ -21,23 +20,20 @@
                 <v-list-tile-title>Geburtstag</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
-          </v-list-item>
           <v-divider></v-divider>
-          <template v-for="member in item.members.data">
-            <v-list-item :key="member.id">
-              <v-list-tile>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ full_name(member) }}</v-list-tile-title>
-                  <v-list-tile-sub-title>{{ address(member) }}</v-list-tile-sub-title>
-                </v-list-tile-content>
-                <v-list-tile-content>
-                  {{ member.email }}                  
-                </v-list-tile-content>
-                <v-list-tile-content>
-                  {{ member.birthday }}                  
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list-item>
+          <template v-for="member in item.members">
+            <v-list-tile :key="member.id">
+              <v-list-tile-content>
+                <v-list-tile-title>{{ full_name(member) }}</v-list-tile-title>
+                <v-list-tile-sub-title>{{ address(member) }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+              <v-list-tile-content>
+                {{ member.email }}
+              </v-list-tile-content>
+              <v-list-tile-content>
+                {{ member.birthday }}
+              </v-list-tile-content>
+            </v-list-tile>
           </template>
         </v-list>
       </v-card-row>
@@ -49,7 +45,7 @@
 </template>
 
 <script>
-  export default {
+export default {
     middleware: 'authenticated',
     data () {
       return {
@@ -66,10 +62,10 @@
       }
     },
     asyncData ({ error, store }) {
-      return store.dispatch('members/all')
+      return store.dispatch('members/fetchAllMembers')
       .then((response) => {
         return {
-          items: store.state.members.departments,
+          items: store.state.members.members,
           loading: false
         }
       })
@@ -86,5 +82,5 @@
         return item.street_address + ' ' + item.postal_code + ' ' + item.city
       }
     }
-  }
+}
 </script>

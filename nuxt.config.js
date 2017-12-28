@@ -16,7 +16,34 @@ module.exports = {
   },
 
   router: {
-    middleware: 'check-auth'
+    middleware: 'check-auth',
+  },
+
+  modules: [
+    '@nuxtjs/axios',
+  ],
+
+  axios: {
+    debug: true,
+    baseURL: 'http://racoony.test/',
+    requestInterceptor: (config, { store }) => {
+      if (store.state.auth.access_token) {
+        config.headers.common['Authorization'] = `Bearer ${store.state.auth.access_token}`
+      }
+      return config
+    },
+    errorHandler (err, { redirect, store }) {
+      if (err.response) {
+        if (err.response.status === 401) {
+          console.log('It seems that the token is expired or invalid.')
+          store.commit('auth/REMOVE_TOKEN')
+          store.commit('auth/REMOVE_USER')
+          return redirect('/login')
+        }
+      }
+
+      return Promise.reject(err)
+    }
   },
 
   /*

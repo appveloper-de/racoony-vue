@@ -1,4 +1,3 @@
-import axios from 'axios'
 import Cookie from 'js-cookie'
 
 export const state = () => ({
@@ -12,6 +11,12 @@ export const mutations = {
   },
   SET_ACCESS_TOKEN: function (state, token) {
     state.access_token = token
+  },
+  REMOVE_TOKEN: (state) => {
+    state.access_token = null
+  },
+  REMOVE_USER: (state) => {
+    state.user = null
   }
 }
 
@@ -25,32 +30,41 @@ export const getters = {
 }
 
 export const actions = {
-  login ({ dispatch }, { email, password }) {
-    return axios.post('http://racoony.app/auth/token', { 
-      username: email, password: password 
-    }).then((response) => {
-      dispatch('setToken', { token: response.data.access_token })
-    }).catch((error) => {
+  async login ({ dispatch }, { email, password }) {
+    let data = null
+    try {
+      data = await this.$axios.$post('/auth/login', {
+        username: email, password: password
+      })
+    } catch (error) {
       if (error.response.status === 401) {
         throw new Error('Bad credentials')
       }
-    })
+    }
+
+    if (data) {
+      dispatch('setToken', { token: data.access_token })
+    }
   },
-  me ({ commit, state }) {
-    return axios.get('http://racoony.app/api/me', {
-      headers: {
-        'Authorization': 'Bearer ' + state.access_token
-      }
-    })
-    .then((response) => {
-      commit('SET_USER', response.data)
-    })
+  async me ({ commit, state }) {
+    let user = null
+    try {
+      user = await this.$axios.$get('/auth/me')
+    } catch (error) {
+      console.log(error)
+    }
+
+    if (user) {
+      commit('SET_USER', user)
+    } else {
+      console.log('could not fetch user.')
+    }
   },
   setToken ({ commit }, { token }) {
     if (token) {
       commit('SET_ACCESS_TOKEN', token)
-      window.localStorage.setItem('token', token)
       Cookie.set('token', token)
+      this.$axios.setToken(token, 'Bearer')
     }
   }
 }
