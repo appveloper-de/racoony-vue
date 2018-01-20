@@ -94,7 +94,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-content>
-      <v-container fill-height>
+      <v-container fluid>
         <v-layout justify-center align-center>
           <nuxt />
         </v-layout>

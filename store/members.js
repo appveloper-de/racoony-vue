@@ -4,16 +4,15 @@ export const state = () => ({
 
 export const actions = {
   async fetchAllMembers({ commit }) {
-    let members = null
-    try {
-      members = await this.$axios.$get('/api/members')
-    } catch (error) {
-      console.log(error)
+    let response = await this.$axios.$get('/api/members')
+    if (response.data) {
+      commit('setMembers', response.data)
     }
-
-    if (members) {
-      commit('setMembers', members.data)
-    }
+    return response
+  },
+  async fetchMemberById({ commit }, member) {
+    let response = await this.$axios.$get('/api/members/' + member.id)
+    return response
   }
 }
 

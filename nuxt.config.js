@@ -24,7 +24,7 @@ module.exports = {
   ],
 
   axios: {
-    debug: true,
+    debug: false,
     baseURL: 'http://racoony.test/',
     requestInterceptor: (config, { store }) => {
       if (store.state.auth.access_token) {

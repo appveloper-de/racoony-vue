@@ -1,47 +1,87 @@
 <template>
-  <div v-if="items.length > 0">
-    <v-card v-for="item in items" :key="item.id">
-      <v-card-row class="green darken-1">
-        <v-card-title light>
-          {{ item.name }}
-        </v-card-title>
-      </v-card-row>
-      <v-card-row>
-        <v-list style="flex: 1;">
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Name</v-list-tile-title>
-                <v-list-tile-sub-title>Adresse</v-list-tile-sub-title>
-              </v-list-tile-content>
-              <v-list-tile-content>
-                <v-list-tile-title>Email-Adresse</v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-content>
-                <v-list-tile-title>Geburtstag</v-list-tile-title>
-              </v-list-tile-content>
+  <v-layout row wrap>
+    <v-flex xs12 sm12>
+      <v-toolbar card color="transparent">
+        <div>
+          <v-checkbox @click="selectAll" class="pt-4"></v-checkbox>
+        </div>
+        <v-menu offset-y>
+          <v-btn slot="activator" >
+            <span>Selection</span>
+            <v-icon>arrow_drop_down</v-icon>
+          </v-btn>
+          <v-list>
+            <v-list-tile @click="">
+              <v-list-tile-title>Move to ...</v-list-tile-title>
             </v-list-tile>
-          <v-divider></v-divider>
-          <template v-for="member in item.members">
-            <v-list-tile :key="member.id">
-              <v-list-tile-content>
-                <v-list-tile-title>{{ full_name(member) }}</v-list-tile-title>
-                <v-list-tile-sub-title>{{ address(member) }}</v-list-tile-sub-title>
-              </v-list-tile-content>
-              <v-list-tile-content>
-                {{ member.email }}
-              </v-list-tile-content>
-              <v-list-tile-content>
-                {{ member.birthday }}
-              </v-list-tile-content>
+            <v-list-tile @click="">
+              <v-list-tile-title>Delete</v-list-tile-title>
             </v-list-tile>
-          </template>
-        </v-list>
-      </v-card-row>
-    </v-card>
-  </div>
-  <div v-else>
-    Es sind keine Daten vorhanden.
-  </div>
+          </v-list>
+        </v-menu>
+        <v-menu offset-y>
+          <v-btn slot="activator">
+            <span>Sort by</span>
+            <v-icon>arrow_drop_down</v-icon>
+          </v-btn>
+          <v-list>
+            <v-list-tile @click="">
+              <v-list-tile-title>Name</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile @click="">
+              <v-list-tile-title>City</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile @click="">
+              <v-list-tile-title>Entry Date</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+        <v-spacer></v-spacer>
+        <v-text-field
+          single-line
+          class="pt-4"
+          style="max-width: 300px"
+          id="member-search-input"
+          append-icon="search"
+          clearable
+          placeholder="Search member..."></v-text-field>
+      <!-- </v-toolbar-items> -->
+      </v-toolbar>
+    </v-flex>
+    <v-flex xs12 sm12>
+      <v-card>
+        <v-card-text class="pa-0">
+          <v-list three-line class="py-0">
+            <template v-for="(member, index) in members">
+              <v-list-tile :key="index" avatar :to="'/members/' + member.id" nuxt>
+                <v-list-tile-action>
+                  <v-checkbox v-model="selection" :value="member.id"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-action>
+                  <v-icon color="grey">star</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-avatar size="48px" class="mt-0 mr-3">
+                  <v-avatar class="teal">
+                    <span class="white--text headline">{{ member.first_name.charAt(0) }}</span>
+                  </v-avatar>
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title>
+                    {{ fullName(member) }}
+                  </v-list-tile-title>
+                  <v-list-tile-sub-title>
+                    {{ member.postal_code }} {{ member.city }} <br>
+                    {{ member.email }}
+                    </v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-divider v-if="index+1 < members.length"></v-divider>
+            </template>
+          </v-list>
+        </v-card-text>
+      </v-card>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -50,36 +90,37 @@ export default {
     data () {
       return {
         search: '',
-        items: [],
+        pagination: null,
+        members: [
+        ],
+        selection: [],
         loading: false,
-        headers: [
-          { text: 'Member ID', value: 'id', left: true },
-          { text: 'Name', value: 'name' },
-          { text: 'Address', value: 'address' },
-          { text: 'Birthday', value: 'birthday' },
-          { text: 'Entry date', value: 'entry_date' },
-        ]
       }
     },
-    asyncData ({ error, store }) {
-      return store.dispatch('members/fetchAllMembers')
-      .then((response) => {
+    async asyncData ({ error, store }) {
+      try {
+        let { data, pagination } = await store.dispatch('members/fetchAllMembers')
+
         return {
-          items: store.state.members.members,
+          members: Object.values(data),
+          pagination: pagination,
           loading: false
         }
-      })
-      .catch((err) => {
-        console.log(err)
-        return { loading: false }
-      })
+      } catch (error) {
+        return {
+          loading: false
+        }
+      }
     },
     methods: {
-      full_name (item) {
+      fullName (item) {
         return item.first_name + ' ' + item.last_name
       },
       address (item) {
         return item.street_address + ' ' + item.postal_code + ' ' + item.city
+      },
+      selectAll () {
+        console.log("selecting all checkboxes")
       }
     }
 }

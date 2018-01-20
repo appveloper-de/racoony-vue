@@ -1845,10 +1845,6 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-google@^0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-google/-/eslint-config-google-0.9.1.tgz#83353c3dba05f72bb123169a4094f4ff120391eb"
-
 eslint-scope@^3.7.1:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/eslint-scope/-/eslint-scope-3.7.1.tgz#3d63c3edfda02e06e01a452ad88caacc7cdcb6e8"
@@ -5222,9 +5218,9 @@ vue@~2.4.2:
   version "2.4.4"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.4.4.tgz#ea9550b96a71465fd2b8b17b61673b3561861789"
 
-vuetify@^0.17.2:
-  version "0.17.5"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-0.17.5.tgz#3dc03471ed1af72501284fa1b43c2327756bea2f"
+vuetify@^1.0.0-beta.1:
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.0.0-beta.1.tgz#27068ab1ab5532fa966a740b07d6fa9d5dab6329"
 
 vuex@^2.4.0:
   version "2.5.0"
