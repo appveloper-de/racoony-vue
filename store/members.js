@@ -13,6 +13,10 @@ export const actions = {
   async fetchMemberById({ commit }, member) {
     let response = await this.$axios.$get('/api/members/' + member.id)
     return response
+  },
+  async updateMember({ }, member) {
+    let response = await this.$axios.$patch('/api/members/' + member.id, member)
+    return response
   }
 }
 

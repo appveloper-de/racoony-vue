@@ -1,5 +1,5 @@
-export default async function ({ store, redirect, isServer, error, req }) {
-  if (isServer && !req) {
+export default async function ({ store, redirect, error, req }) {
+  if (process.server && !req) {
     return
   }
 

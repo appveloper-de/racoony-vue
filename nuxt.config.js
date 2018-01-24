@@ -21,6 +21,7 @@ module.exports = {
 
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/toast'
   ],
 
   axios: {
@@ -44,6 +45,9 @@ module.exports = {
 
       return Promise.reject(err)
     }
+  },
+  toast: {
+    position: 'bottom-right'
   },
 
   /*
