@@ -1,25 +1,22 @@
 <template>
   <v-layout justify-center>
-    <v-flex sm5>
+    <v-flex sm3 align-center align-content-center style="margin-top: 200px">
       <v-card>
-        <v-card-title>
-          <span>Login</span>
-        </v-card-title>
         <v-card-text>
           <v-container fluid>
             <v-layout row>
               <v-flex sm12>
-                <v-text-field name="email" label="Email" single-line prepend-icon="account_circle" v-model="email"></v-text-field>
+                <v-text-field label="Email" name="email" prepend-icon="account_circle" v-model="email" />
               </v-flex>
             </v-layout>
             <v-layout row>
               <v-flex sm12>
-                <v-text-field type="password" name="password" label="Password" single-line prepend-icon="lock" v-model="password"></v-text-field>
+                <v-text-field type="password" name="password" label="Password" prepend-icon="lock" v-model="password" />
               </v-flex>
             </v-layout>
             <v-layout row>
               <v-flex sm12>
-                <v-btn raised primary light :disabled="loading" :loading="loading" @click.native="processLogin">
+                <v-btn block color="primary" :disabled="loading" :loading="loading" @click.native="processLogin">
                   Login
                 </v-btn>
               </v-flex>
