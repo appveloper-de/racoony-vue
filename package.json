@@ -10,6 +10,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxtjs/auth": "^4.0.0-rc.3",
     "@nuxtjs/axios": "^4.5.0",
     "@nuxtjs/toast": "^2.3.3",
     "js-cookie": "^2.1.4",
@@ -19,6 +20,7 @@
     "vue-loader": "^13.5.0",
     "vue-server-renderer": "^2.5.8",
     "vue-template-compiler": "^2.5.8",
+    "vuelidate": "^0.6.1",
     "vuetify": "^1.0.0-beta.4"
   },
   "devDependencies": {

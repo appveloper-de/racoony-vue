@@ -1,6 +1,6 @@
 <template>
   <v-layout column align-horiz-center align-vert-center>
-    <v-col xs12 sm8 md6>
+    <v-flex xs12 sm8 md6>
       <v-card>
         <v-card-text>
           <p>Hallo Paul</p>
@@ -14,12 +14,11 @@
           <v-btn primary flat router to="/inspire">Continue</v-btn>
         </v-card-actions>
       </v-card>
-    </v-col>
+    </v-flex>
   </v-layout>
 </template>
 
 <script>
-  export default {
-    middleware: 'authenticated'
-  }
+export default {
+}
 </script>

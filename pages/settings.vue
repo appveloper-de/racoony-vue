@@ -33,7 +33,6 @@
 <script>
   export default {
     pageTitle: 'Einstellungen',
-    middleware: 'authenticated',
     computed: {
       club () {
         return this.$route.name === 'settings-club'

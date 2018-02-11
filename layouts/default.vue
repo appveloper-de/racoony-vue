@@ -34,6 +34,17 @@
           </v-list-tile-content>
         </v-list-tile>
 
+        <v-list-tile to="/departments" router exact>
+          <v-list-tile-action>
+            <v-icon>recent_actors</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              Departments
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
         <!-- options -->
         <v-list-tile class="mt-3" @click="">
           <v-list-tile-action>
@@ -78,7 +89,7 @@
             <img src="/users/2576.png" alt="avatar">
           </v-avatar>
           <v-list>
-            <v-list-tile @click="">
+            <v-list-tile @click="logout">
               <v-list-tile-action>
                 <v-icon>exit_to_app</v-icon>
               </v-list-tile-action>
@@ -95,7 +106,7 @@
     </v-toolbar>
     <v-content>
       <v-container fluid>
-        <v-layout justify-center align-center>
+        <v-layout justify-center align-center row>
           <nuxt />
         </v-layout>
       </v-container>
@@ -106,10 +117,15 @@
 <script>
   export default {
     data: () => ({
-      drawer: null
+      drawer: null,
     }),
     props: {
       source: String
+    },
+    methods: {
+      logout () {
+        this.$auth.logout()
+      }
     }
   }
 </script>

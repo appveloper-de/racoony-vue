@@ -1,21 +1,27 @@
 <template>
   <v-app>
-    <main>
-      <v-slide-y-transition mode="out-in">
-      <v-container fill-height fluid class="login-container">
+    <v-content>
+      <v-container fill-height fluid>
+        <v-slide-y-transition mode="out-in">
           <nuxt />
+        </v-slide-y-transition>
       </v-container>
-      </v-slide-y-transition>
-    </main>
+    </v-content>
   </v-app>
 </template>
 
-<style>
-.login-container {
-  height: 100vh;
+
+<style scoped>
+.content {
   background-image: url('~/assets/images/rhinestone-background.svg');
-  /* background-image: url('~/assets/images/13.jpg'); */
   background-size: cover;
-  /* background-position: top left; */
 }
 </style>
+
+<script>
+export default {
+  auth: false
+}
+</script>
+
+

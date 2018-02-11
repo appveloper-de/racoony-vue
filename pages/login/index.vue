@@ -1,6 +1,6 @@
 <template>
-  <v-layout justify-center>
-    <v-flex sm3 align-center align-content-center style="margin-top: 200px">
+  <v-layout align-center justify-center>
+    <v-flex sm3 align-center align-content-center>
       <v-card>
         <v-card-text>
           <v-container fluid>
@@ -31,7 +31,6 @@
 <script>
   export default {
     layout: 'login',
-    middleware: 'anonymous',
     data () {
       return {
         email: '',
@@ -40,18 +39,14 @@
       }
     },
     methods: {
-      processLogin () {
+      async processLogin () {
         this.loading = true
-        this.$store.dispatch('auth/login', {
-          email: this.email,
-          password: this.password
-        })
-        .then((response) => {
-          this.loading = false
-          this.$router.replace('/')
-        })
-        .catch((error) => {
-          this.loading = false
+
+        await this.$auth.login({
+          data: {
+            username: this.email,
+            password: this.password
+          }
         })
       }
     }

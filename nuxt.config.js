@@ -16,38 +16,30 @@ module.exports = {
   },
 
   router: {
-    middleware: 'check-auth',
+    middleware: ['auth'],
   },
 
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     '@nuxtjs/toast'
   ],
 
   axios: {
     debug: false,
     baseURL: 'http://racoony.test/',
-    requestInterceptor: (config, { store }) => {
-      if (store.state.auth.access_token) {
-        config.headers.common['Authorization'] = `Bearer ${store.state.auth.access_token}`
-      }
-      return config
-    },
-    errorHandler (err, { redirect, store }) {
-      if (err.response) {
-        if (err.response.status === 401) {
-          console.log('It seems that the token is expired or invalid.')
-          store.commit('auth/REMOVE_TOKEN')
-          store.commit('auth/REMOVE_USER')
-          return redirect('/login')
-        }
-      }
-
-      return Promise.reject(err)
-    }
   },
+
   toast: {
     position: 'bottom-right'
+  },
+
+  auth: {
+    endpoints: {
+      login: { url: '/auth/login', method: 'post', propertyName: 'access_token' },
+      logout: { url: '/auth/logout', method: 'post' },
+      user: { url: '/auth/me', method: 'get', propertyName: false }
+    },
   },
 
   /*
@@ -58,7 +50,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    vendor: ['vuetify', 'axios', 'js-cookie']
+    vendor: ['vuetify', 'axios']
   },
   plugins: ['~plugins/vuetify.js'],
   css: [

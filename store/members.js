@@ -17,6 +17,10 @@ export const actions = {
   async updateMember({ }, member) {
     let response = await this.$axios.$patch('/api/members/' + member.id, member)
     return response
+  },
+  async createMember ({ commit }, member) {
+    let response = await this.$axios.$post('/api/members', member)
+    return response
   }
 }
 
