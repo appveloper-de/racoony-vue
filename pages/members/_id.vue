@@ -178,10 +178,18 @@
                           <!-- TODO comment this in when we have detail department views -->
                           <!-- <v-btn icon :href="`/departments/${departments.item.id}`" slot="activator"> -->
                             <v-btn icon nuxt to="/departments" slot="activator">
-                            <v-icon color="teal">open_in_browser</v-icon>
+                            <v-icon color="teal darken-1">search</v-icon>
                           </v-btn>
                           <span>Open department</span>
                         </v-tooltip>
+
+                        <v-tooltip top>
+                            <v-btn icon @click="removeMemberFromDepartment(departments.item.id)" slot="activator">
+                            <v-icon color="red lighten-2">remove_circle_outline</v-icon>
+                          </v-btn>
+                          <span>Remove from department</span>
+                        </v-tooltip>
+
                       </td>
                     </template>
                   </v-data-table>
@@ -283,6 +291,12 @@ export default {
       await this.$store.dispatch('members/assignToDepartment', {
         memberId: this.member.id,
         departmentId: this.addToDepartment
+      })
+    },
+    async removeMemberFromDepartment (departmentId) {
+      await this.$store.dispatch('members/removeFromDepartment', {
+        memberId: this.member.id,
+        departmentId: departmentId
       })
     }
   },

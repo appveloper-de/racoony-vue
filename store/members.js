@@ -18,19 +18,28 @@ export const actions = {
       commit('setCurrentMember', response.data)
     }
   },
-  async updateMember(context, member) {
+  async updateMember(store, member) {
     return await this.$axios.$patch('/api/members/' + member.id, member)
   },
   async createMember ({ commit }, member) {
     return await this.$axios.$post('/api/members', member)
   },
-  async assignToDepartment ({ commit }, data ) {
+  async assignToDepartment ({ commit }, data) {
     const { data: member } = await this.$axios.$post(`/api/members/${data.memberId}/departments`, {
       departmentId: data.departmentId
     })
 
     commit('setCurrentMember', member)
     commit('updateMember', member)
+  },
+  async removeFromDepartment ({ commit, state }, data) {
+    const { status } = await this.$axios.delete(`/api/members/${data.memberId}/departments`, {
+      params: { departmentId: data.departmentId }
+    })
+
+    if (status === 204) {
+      commit('removeDepartmentFromCurrent', data.departmentId)
+    }
   }
 }
 
@@ -44,5 +53,9 @@ export const mutations = {
   },
   setCurrentMember (state, member) {
     state.current = member
+  },
+  removeDepartmentFromCurrent (state, departmentId) {
+    const departmentIndex = state.current.departments.findIndex(department => department.id === departmentId)
+    state.current.departments.splice(departmentIndex, 1)
   }
 }
