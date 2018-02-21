@@ -55,16 +55,16 @@
           <td>{{ departments.item.description }}</td>
           <td>{{ departments.item.number_of_members }}</td>
           <td class="justify-center layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(departments.item)">
-            <v-icon color="teal">edit</v-icon>
-          </v-btn>
-          <v-btn icon class="mx-0" @click="openDeleteDialog(departments.item)">
-            <v-icon color="pink">delete</v-icon>
-          </v-btn>
-        </td>
+            <v-btn icon class="mx-0" @click="editItem(departments.item)">
+              <v-icon color="teal">edit</v-icon>
+            </v-btn>
+            <v-btn icon class="mx-0" @click="openDeleteDialog(departments.item)">
+              <v-icon color="pink">delete</v-icon>
+            </v-btn>
+          </td>
         </template>
         <template slot="no-data">
-          FML no departments!
+          There are no departments, yet.
         </template>
       </v-data-table>
     </v-flex>

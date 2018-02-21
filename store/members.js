@@ -1,5 +1,6 @@
 export const state = () => ({
-  list: []
+  list: [],
+  current: null
 })
 
 export const actions = {
@@ -11,22 +12,37 @@ export const actions = {
     }
     return response
   },
-  async fetchMemberById(context, member) {
-    const response = await this.$axios.$get(`/api/members/${member.id}`)
-    return response
+  async fetchMemberById({ commit }, member) {
+    const response = await this.$axios.$get(`/api/members/${member.id}?with=departments`)
+    if (response.data) {
+      commit('setCurrentMember', response.data)
+    }
   },
   async updateMember(context, member) {
-    let response = await this.$axios.$patch('/api/members/' + member.id, member)
-    return response
+    return await this.$axios.$patch('/api/members/' + member.id, member)
   },
   async createMember ({ commit }, member) {
-    let response = await this.$axios.$post('/api/members', member)
-    return response
+    return await this.$axios.$post('/api/members', member)
+  },
+  async assignToDepartment ({ commit }, data ) {
+    const { data: member } = await this.$axios.$post(`/api/members/${data.memberId}/departments`, {
+      departmentId: data.departmentId
+    })
+
+    commit('setCurrentMember', member)
+    commit('updateMember', member)
   }
 }
 
 export const mutations = {
-  setMembers(state, items) {
+  setMembers (state, items) {
     state.list = items
+  },
+  updateMember (state, member) {
+    const idx = state.list.findIndex(memberInList => memberInList.id === member.id)
+    state.list.splice(idx, 1, member)
+  },
+  setCurrentMember (state, member) {
+    state.current = member
   }
 }
