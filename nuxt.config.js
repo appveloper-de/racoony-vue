@@ -40,6 +40,7 @@ module.exports = {
       logout: { url: '/auth/logout', method: 'post' },
       user: { url: '/auth/me', method: 'get', propertyName: false }
     },
+    resetOnError: true
   },
 
   /*
@@ -52,7 +53,10 @@ module.exports = {
   build: {
     vendor: ['vuetify', 'axios']
   },
-  plugins: ['~plugins/vuetify.js'],
+  plugins: [
+    '~plugins/vuetify.js',
+    '~plugins/auth'
+  ],
   css: [
     { src: '~assets/style/app.styl', lang: 'styl' }
   ]

@@ -243,7 +243,9 @@ export default {
     }
   },
   created () {
-    this.addToDepartment = this.departments[0].id
+    if (this.departments.length > 0) {
+      this.addToDepartment = this.departments[0].id
+    }
   },
   data () {
     return {
