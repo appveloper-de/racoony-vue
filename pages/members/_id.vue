@@ -170,7 +170,7 @@
               <v-layout row>
                 <v-flex md5>
                   <v-subheader>Active memberships</v-subheader>
-                  <v-data-table :items="member.departments" hide-actions hide-headers class="elevation-1">
+                  <v-data-table :items="membersDepartments" hide-actions hide-headers class="elevation-1">
                     <template slot="items" slot-scope="departments">
                       <td>{{ departments.item.name }}</td>
                       <td class="justify-center layout px-0">
@@ -263,7 +263,8 @@ export default {
         { text: 'Switzerland', value: 'CHE', }
       ],
       tabs: 'tab-general',
-      addToDepartment: false
+      addToDepartment: false,
+      member: Object.assign({}, this.$store.state.members.current)
     }
   },
   async fetch ({ store, params }) {
@@ -356,12 +357,12 @@ export default {
     today () {
       return moment().format('DD.MM.YYYY')
     },
-    member () {
-      return this.$store.state.members.current
+    membersDepartments () {
+      return this.$store.state.members.current.departments
     },
     departments () {
       return this.$store.state.departments.list.filter(department => {
-        return !this.member.departments.find(memberDepartment => memberDepartment.id === department.id)
+        return !this.membersDepartments.find(memberDepartment => memberDepartment.id === department.id)
       })
     }
   }
