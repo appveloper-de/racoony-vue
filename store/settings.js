@@ -2,6 +2,7 @@ export const state = () => ({
   general: null,
 })
 
+
 export const actions = {
   async saveGeneral ({ commit }, data) {
     const { status, data: settings } = await this.$axios.put('/api/settings/club', data)

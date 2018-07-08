@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-flex>
-      <v-btn flat color="grey darken-2" class="mb-3 ml-0" href="/members" nuxt>
+      <v-btn flat color="grey darken-2" class="mb-3 ml-0" to="/members" nuxt>
         <v-icon left>arrow_back</v-icon>
         Back to overview
       </v-btn>

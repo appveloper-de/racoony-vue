@@ -23,24 +23,13 @@
 
         <!-- Members -->
         <v-subheader class="mt-3 grey--text text--darken-1">MEMBERS</v-subheader>
-        <v-list-tile to="/members" router exact>
+        <v-list-tile to="/members" router>
           <v-list-tile-action>
             <v-icon>people</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
               Members
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile to="/departments" router exact>
-          <v-list-tile-action>
-            <v-icon>recent_actors</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Departments
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
