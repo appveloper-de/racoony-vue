@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-flex xs3>
-      <v-list three-line>
+      <v-list three-line class="elevation-1 mt-3">
         <v-list-tile avatar nuxt to="/settings/club" v-model="club">
           <v-list-tile-content>
             <v-list-tile-title>Vereinsdaten</v-list-tile-title>

@@ -1,87 +1,38 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs12 sm12>
-      <v-toolbar card color="transparent">
-        <div>
-          <v-checkbox @click="selectAll" class="pt-4"></v-checkbox>
-        </div>
-        <v-menu offset-y>
-          <v-btn slot="activator" >
-            <span>Selection</span>
-            <v-icon>arrow_drop_down</v-icon>
-          </v-btn>
-          <v-list>
-            <v-list-tile @click="">
-              <v-list-tile-title>Move to ...</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile @click="">
-              <v-list-tile-title>Delete</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
-        <v-menu offset-y>
-          <v-btn slot="activator">
-            <span>Sort by</span>
-            <v-icon>arrow_drop_down</v-icon>
-          </v-btn>
-          <v-list>
-            <v-list-tile @click="">
-              <v-list-tile-title>Name</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile @click="">
-              <v-list-tile-title>City</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile @click="">
-              <v-list-tile-title>Entry Date</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
-        <v-btn nuxt to="/members/add" color="primary">
-          <v-icon left>person_add</v-icon>
-          New member
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-text-field
-          single-line
-          class="pt-4"
-          style="max-width: 300px"
-          id="member-search-input"
-          append-icon="search"
-          clearable
-          placeholder="Search member..."></v-text-field>
-      </v-toolbar>
-    </v-flex>
-    <v-flex xs12 sm12>
+  <v-layout column>
+    <v-flex>
+      <v-btn nuxt to="/members/add" color="primary" class="mb-3">
+        <v-icon left>person_add</v-icon>
+        New member
+      </v-btn>
       <v-card>
-        <v-card-text class="pa-0">
-          <v-list three-line class="py-0">
-            <template v-for="(member, index) in members">
-              <v-list-tile :key="index" avatar :to="'/members/' + member.id" nuxt>
-                <v-list-tile-action>
-                  <v-checkbox v-model="selection" :value="member.id"></v-checkbox>
-                </v-list-tile-action>
-                <v-list-tile-action>
-                  <v-icon color="grey">star</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-avatar size="48px" class="mt-0 mr-3">
-                  <v-avatar class="teal">
-                    <span class="white--text headline">{{ member.first_name.charAt(0) }}</span>
-                  </v-avatar>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>
-                    {{ fullName(member) }}
-                  </v-list-tile-title>
-                  <v-list-tile-sub-title>
-                    {{ member.postal_code }} {{ member.city }} <br>
-                    {{ member.email }}
-                    </v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-divider v-if="index+1 < members.length"></v-divider>
-            </template>
-          </v-list>
-        </v-card-text>
+        <v-card-title>
+          <v-spacer></v-spacer>
+          <v-text-field
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+            v-model="search"
+          ></v-text-field>
+        </v-card-title>
+        <v-data-table
+          :headers="headers"
+          :items="members"
+          :search="search"
+          :rows-per-page-items="[10, 20, 50]"
+          :pagination.sync="pagination"
+        >
+          <template slot="items" slot-scope="members">
+            <tr @click="openMemberDetails(members.item.id)">
+              <td>{{ members.item.id }}</td>
+              <td>{{ members.item.name }}</td>
+              <td>{{ members.item.address }}</td>
+              <td>{{ members.item.email }}</td>
+              <td>{{ members.item.birthday }}</td>
+            </tr>
+          </template>
+        </v-data-table>
       </v-card>
     </v-flex>
   </v-layout>
@@ -92,37 +43,32 @@ export default {
     data () {
       return {
         search: '',
-        pagination: null,
-        members: [
+        headers: [
+          { text: 'ID', value: 'id' },
+          { text: 'Name', value: 'name' },
+          { text: 'Address', value: 'address', sortable: false },
+          { text: 'Email', value: 'email' },
+          { text: 'Date of Birth', value: 'birthday' },
         ],
+        pagination: {
+          rowsPerPage: 20,
+        },
         selection: [],
         loading: false,
       }
     },
-    async asyncData ({ error, store }) {
-      try {
-        let { data, pagination } = await store.dispatch('members/fetchAllMembers')
-
-        return {
-          members: Object.values(data),
-          pagination: pagination,
-          loading: false
-        }
-      } catch (error) {
-        return {
-          loading: false
-        }
+    computed: {
+      members () {
+        return this.$store.state.members.list
       }
     },
+    async fetch ({ error, store }) {
+      await store.dispatch('members/fetchAll')
+    },
     methods: {
-      fullName (item) {
-        return item.first_name + ' ' + item.last_name
-      },
-      address (item) {
-        return item.street_address + ' ' + item.postal_code + ' ' + item.city
-      },
-      selectAll () {
+      openMemberDetails (memberId) {
+        this.$router.push(`/members/${memberId}`)
       }
-    }
+    },
 }
 </script>

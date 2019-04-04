@@ -1,170 +1,233 @@
 <template>
   <v-layout>
-    <v-flex xs12>
-      <v-card>
-        <v-card-media src="/backgrounds/department-football.jpg" height="200px" class="white--text">
-          <v-container fluid fill-height>
-            <v-layout fill-height>
-              <v-flex xs12 align-end d-flex>
-                <span class="headline">
-                  <v-avatar class="teal">
-                    <span class="white--text headline" v-html="member.first_name.charAt(0).toUpperCase()"></span>
-                  </v-avatar>
-                  <span> {{ fullName }}</span>
-                </span>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-media>
-        <v-card-title>
-          Some title
-        </v-card-title>
-        <v-card-text>
-          <form>
-            <v-layout column>
-              <v-layout row>
+    <v-flex>
+      <v-btn flat color="grey darken-2" class="mb-3 ml-0" href="/members" nuxt>
+        <v-icon left>arrow_back</v-icon>
+        Back to overview
+      </v-btn>
+      <v-toolbar
+        tabs
+        color="light-green lighten-4"
+        extended
+      >
+        <!-- icon -->
+        <v-toolbar-title>{{ fullName }}</v-toolbar-title>
+        <v-tabs
+          slot="extension"
+          color="transparent"
+          v-model="tabs"
+          slider-color="light-green darken-1"
+        >
+          <v-tab href="#tab-general">General</v-tab>
+          <v-tab href="#tab-departments">Departments</v-tab>
+        </v-tabs>
 
+      </v-toolbar>
+      <v-tabs-items v-model="tabs" class="elevation-1">
+        <v-tab-item id="tab-general">
+          <v-card flat>
+            <v-card-text>
+              <form>
+                <v-layout column>
+                  <v-layout row>
+
+                    <v-flex md6>
+                      <v-layout row>
+                        <v-flex md5>
+                          <v-text-field
+                            label="First name"
+                            v-model="member.first_name"
+                            :error-messages="firstNameErrors"
+                            required
+                          ></v-text-field>
+                        </v-flex>
+                        <v-flex md5 offset-md1>
+                          <v-text-field
+                            label="Last name"
+                            v-model="member.last_name"
+                            :error-messages="lastNameErrors"
+                            required
+                          ></v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout row>
+                        <v-flex md5>
+                          <v-text-field
+                            label="Date of birth"
+                            mask="##.##.####"
+                            return-masked-value
+                            v-model="member.birthday"
+                            append-icon="event"
+                            placeholder="16.06.1988"
+                            :error-messages="birthdayErrors"
+                            required
+                          ></v-text-field>
+                        </v-flex>
+
+                        <v-flex md5 offset-md1>
+                          <v-text-field
+                            label="Date of entry"
+                            mask="##.##.####"
+                            v-model="member.entry_date"
+                            :error-messages="entryDateErrors"
+                            return-masked-value
+                            :placeholder="today"
+                          ></v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout row>
+                        <v-flex md5>
+                          <v-text-field label="Phone" v-model="member.phone"></v-text-field>
+                        </v-flex>
+                        <v-flex md5 offset-md1>
+                          <v-text-field
+                            label="Email address"
+                            v-model="member.email"
+                            required
+                            :error-messages="emailErrors"></v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout row>
+                        <v-flex md11>
+                          <v-text-field
+                            label="Street address"
+                            v-model="member.street_address"
+                            placeholder="Aschrottstraße 4"
+                            required
+                            :error-messages="streetAddressErrors"
+                          ></v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout row>
+                        <v-flex md3>
+                          <v-text-field
+                            label="Postal code"
+                            v-model="member.postal_code"
+                            mask="#####"
+                            placeholder="34119"
+                            :error-messages="postalCodeErrors"
+                            required
+                          ></v-text-field>
+                        </v-flex>
+                        <v-flex md7 offset-md1>
+                          <v-text-field
+                            label="City"
+                            v-model="member.city"
+                            required
+                            placeholder="Kassel"
+                            :error-messages="cityErrors"
+                          ></v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout row>
+                        <v-flex md11>
+                          <v-select
+                            v-model="member.country.code"
+                            :items="availableCountries"
+                            label="Country"
+                          ></v-select>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout row>
+                        <v-flex md6>
+
+                        </v-flex>
+                      </v-layout>
+
+                    </v-flex>
+
+                    <v-flex md6>
+                      <div>
+                        <div class="subheading">General information</div>
+                        <p class="body-1 grey--text">General information about the person, like address, name, birthday and so on.</p>
+                      </div>
+                    </v-flex>
+                  </v-layout>
+
+                </v-layout>
+              </form>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="save">
+                <v-icon left>edit</v-icon>
+                Save member
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+
+        </v-tab-item>
+
+        <v-tab-item id="tab-departments">
+          <v-card flat>
+            <v-card-text>
+              <v-layout row>
                 <v-flex md5>
-                  <div>
-                    <div class="subheading">General information</div>
-                    <p class="body-1 grey--text">General information about the person, like address, name, birthday and so on.</p>
-                  </div>
+                  <v-subheader>Active memberships</v-subheader>
+                  <v-data-table :items="membersDepartments" hide-actions hide-headers class="elevation-1">
+                    <template slot="items" slot-scope="departments">
+                      <td>{{ departments.item.name }}</td>
+                      <td class="justify-center layout px-0">
+                        <v-tooltip top>
+                          <!-- TODO comment this in when we have detail department views -->
+                          <!-- <v-btn icon :href="`/departments/${departments.item.id}`" slot="activator"> -->
+                            <v-btn icon nuxt to="/departments" slot="activator">
+                            <v-icon color="teal darken-1">search</v-icon>
+                          </v-btn>
+                          <span>Open department</span>
+                        </v-tooltip>
+
+                        <v-tooltip top>
+                            <v-btn icon @click="removeMemberFromDepartment(departments.item.id)" slot="activator">
+                            <v-icon color="red lighten-2">remove_circle_outline</v-icon>
+                          </v-btn>
+                          <span>Remove from department</span>
+                        </v-tooltip>
+
+                      </td>
+                    </template>
+                  </v-data-table>
+
+                  <v-subheader>Passive memberships</v-subheader>
+
                 </v-flex>
 
-                <v-flex md6>
-
-                  <v-layout row>
-                    <v-flex md5>
-                      <v-text-field
-                        label="First name"
-                        v-model="member.first_name"
-                        :error-messages="firstNameErrors"
-                        required
-                      ></v-text-field>
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                    <v-flex md5>
-                      <v-text-field
-                        label="Last name"
-                        v-model="member.last_name"
-                        :error-messages="lastNameErrors"
-                        required
-                      ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout row>
-                    <v-flex md4>
-                      <v-text-field
-                        label="Date of birth"
-                        mask="##.##.####"
-                        return-masked-value
-                        v-model="member.birthday"
-                        append-icon="event"
-                        placeholder="16.06.1988"
-                        :error-messages="birthdayErrors"
-                        required
-                      ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex md4>
-                      <v-text-field
-                        label="Date of entry"
-                        mask="##.##.####"
-                        v-model="member.entry_date"
-                        :error-messages="entryDateErrors"
-                        return-masked-value
-                        :placeholder="today"
-                      ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout row>
-                    <v-flex md5>
-                      <v-text-field label="Phone" v-model="member.phone"></v-text-field>
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                    <v-flex md5>
-                      <v-text-field
-                        label="Email address"
-                        v-model="member.email"
-                        required
-                        :error-messages="emailErrors"></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout row>
-                    <v-flex>
-                      <v-text-field
-                        label="Street address"
-                        v-model="member.street_address"
-                        placeholder="Aschrottstraße 4"
-                        required
-                        :error-messages="streetAddressErrors"
-                      ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout row>
-                    <v-flex md3>
-                      <v-text-field
-                        label="Postal code"
-                        v-model="member.postal_code"
-                        mask="#####"
-                        placeholder="34119"
-                        :error-messages="postalCodeErrors"
-                        required
-                      ></v-text-field>
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                    <v-flex md8>
-                      <v-text-field
-                        label="City"
-                        v-model="member.city"
-                        required
-                        placeholder="Kassel"
-                        :error-messages="cityErrors"
-                      ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout row>
-                    <v-flex md6>
-                      <v-select
-                        v-model="member.country.code"
-                        :items="availableCountries"
-                        label="Country"
-                      ></v-select>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout row>
-                    <v-flex md6>
-
-                    </v-flex>
-                  </v-layout>
-
+                <v-flex md6 offset-md1>
+                  <v-subheader>Assign departments</v-subheader>
+                  <v-select
+                    :items="departments"
+                    v-model="addToDepartment"
+                    label="Select department"
+                    single-line
+                    item-text="name"
+                    item-value="id"
+                    bottom
+                  ></v-select>
+                  <v-btn color="primary" @click="assignMemberToDepartment">
+                    <v-icon left>play_for_work</v-icon>
+                    Assign to department
+                  </v-btn>
                 </v-flex>
               </v-layout>
+            </v-card-text>
+            <v-card-actions>
 
-            </v-layout>
-          </form>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click="save">
-            <v-icon left>edit</v-icon>
-            Edit member
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+            </v-card-actions>
+          </v-card>
+
+        </v-tab-item>
+      </v-tabs-items>
+
+
     </v-flex>
   </v-layout>
 </template>
-
-<style>
-</style>
 
 <script>
 import { validationMixin } from 'vuelidate'
@@ -187,7 +250,11 @@ export default {
       city: { required }
     }
   },
-
+  created () {
+    if (this.departments.length > 0) {
+      this.addToDepartment = this.departments[0].id
+    }
+  },
   data () {
     return {
       availableCountries: [
@@ -195,15 +262,16 @@ export default {
         { text: 'Austria', value: 'AUT', },
         { text: 'Switzerland', value: 'CHE', }
       ],
+      tabs: 'tab-general',
+      addToDepartment: false,
+      member: Object.assign({}, this.$store.state.members.current)
     }
   },
-  async asyncData ({ store, params }) {
-    let { data } = await store.dispatch('members/fetchMemberById', { id : params.id })
+  async fetch ({ store, params }) {
+    let fetchDepartments = store.dispatch('departments/fetchAll');
+    let fetchMember = store.dispatch('members/fetchMemberById', { id: params.id});
 
-    return {
-      member: data,
-      dialog: true
-    }
+    await Promise.all([fetchDepartments, fetchMember])
   },
   methods: {
     async save () {
@@ -219,6 +287,18 @@ export default {
         console.log(error)
         this.$toast.error('Error while saving the member')
       }
+    },
+    async assignMemberToDepartment () {
+      await this.$store.dispatch('members/assignToDepartment', {
+        memberId: this.member.id,
+        departmentId: this.addToDepartment
+      })
+    },
+    async removeMemberFromDepartment (departmentId) {
+      await this.$store.dispatch('members/removeFromDepartment', {
+        memberId: this.member.id,
+        departmentId: departmentId
+      })
     }
   },
   computed: {
@@ -277,6 +357,14 @@ export default {
     today () {
       return moment().format('DD.MM.YYYY')
     },
+    membersDepartments () {
+      return this.$store.state.members.current.departments
+    },
+    departments () {
+      return this.$store.state.departments.list.filter(department => {
+        return !this.membersDepartments.find(memberDepartment => memberDepartment.id === department.id)
+      })
+    }
   }
 }
 </script>

@@ -1,35 +1,32 @@
 export const state = () => ({
-  club: {
-    general: {
-      name: '',
-      address: '',
-    }
-  }
+  general: null,
 })
 
-export const getters = {
-  general: state => {
-    return state.club.general
-  }
-}
-
 export const actions = {
-  getSettingsClubGeneral({ commit }) {
-    return this.$axios.get('settings/club')
-      .then((response) => {
-        let settingsClubGeneral = response.data.data
-        commit('setClubGeneral', settingsClubGeneral)
-        return response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+  async saveGeneral ({ commit }, data) {
+    const { status, data: settings } = await this.$axios.put('/api/settings/club', data)
+
+    if (status === 200) {
+      commit('setGeneralSettings', settings.data)
+    }
+  },
+  async getGeneral ({ commit }) {
+    const { status, data: settings } = await this.$axios.get('api/settings/club')
+
+    if (status === 200) {
+      commit('setGeneralSettings', settings.data)
+    }
   }
 }
 
 export const mutations = {
-  setClubGeneral(state, data) {
-    state.club.general = data
-  }
+  setGeneralSettings (state, data) {
+    state.general = data
+  },
+  updateGeneralSettings (state, {field, value}) {
+    Object.assign(state.general, {
+      [field]: value
+    })
+  },
 }
 
